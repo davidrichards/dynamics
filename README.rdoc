@@ -1,0 +1,83 @@
+= Dynamics
+
+* teguhub.com
+* blog.teguhub.com
+
+== DESCRIPTION:
+
+This is a dynamics library, meant to create a graph of any objects that you are using and apply graph algebra to these objects.
+
+== FEATURES/PROBLEMS:
+
+* Allows users to define a directed adjacency graph over objects they are working on
+* Applies graph algebra to the graph, allowing easy iteration over systems
+* Graph visualization provided via the dot language (Graphviz)
+* Integrates with any objects that you are using
+* Wrap non-singleton class objects (Fixnum, Symbol, TrueClass, NilClass, and FalseClass)
+
+== SYNOPSIS:
+
+  To get started, you need some objects and an idea of how they relate:
+  c = Contact.new
+  p = 0.25.wrap # Non-singleton classes should be wrapped so that they can contain singleton methods
+  m = 0.3.wrap
+  [c, p, m].make_all_dynamic # Attaches a series of generic dynamics methods to each object
+  
+  plus = Operator.new
+  
+  c.is_input
+  c.to plus
+  plus.to p
+  p.to m
+  p.is_output
+  m.to plus
+
+  c.system # => Any connected object can reveal the system.  This way many systems can be used at the same time.
+  Dynamics.systems # => An array of all currently defined systems
+  c.system.states # => E1 -> E2 -> E3 -> E1 (E2 -> output)
+  c.system.description # => static, dynamic, etc.
+  c.system.iterate(100) # Runs the system n times, default is 1,000.
+  c.system.iterate(10,20) # With two parameters(n,m), runs from time step n to m
+  c.last_run.to_plot
+  c.last_run.to_table
+  c.last_run.to_a
+  c.system.to_dot(filename) # Filename is optional, but otherwise it prints to stdout
+  system # The last system manipulated or run, for a shortcut to obj.system
+  
+  system.to_graph(filename) # graph of all the runs of the whole system
+  c.to_graph(filename)
+  c.to_sparkline(filename)
+  system.to_sparkline(filename) # Only puts the output elements in the sparkline
+  
+== REQUIREMENTS:
+
+* RGL (sudo gem install rgl)
+
+== INSTALL:
+
+* sudo gem install drichards-dynamics
+
+== LICENSE:
+
+(The MIT License)
+
+Copyright (c) 2009 David L. Richards
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
